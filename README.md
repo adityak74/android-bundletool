@@ -1,6 +1,6 @@
 # android-bundletool #
 
-This is a fully self contained module that wraps the Android Bundletool
+This is a fully self contained module that wraps the Android Bundletool (https://github.com/google/bundletool)
 
 This grabs the latest Bundletool Platform tools from https://developer.android.com/studio/command-line/bundletool
 
