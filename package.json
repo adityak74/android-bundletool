@@ -1,7 +1,7 @@
 {
   "name": "android-bundletool",
   "version": "1.0.0",
-  "description": "A self contained anroid bundletool wrapper",
+  "description": "A self contained android bundletool wrapper",
   "main": "index.js",
   "scripts": {
     "test": "node tests/index.js"
@@ -17,8 +17,8 @@
   },
   "homepage": "https://github.com/adityak74/android-bundletool#readme",
   "dependencies": {
-    "chalk": "^4.0.0",
-    "fs-extra": "^9.0.0",
-    "request": "^2.88.2"
+    "chalk": "4.0.0",
+    "fs-extra": "9.0.0",
+    "request": "2.88.2"
   }
 }
