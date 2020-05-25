@@ -69,14 +69,14 @@ const spawnProcess = function spawnProcess(path, userArgs) {
 	if(moreLogging) {
 		console.log(`${path} ${userArgs}`);
 	}
-	toolProcess.on('error', (err) => {
+	toolProcess.on('error', function (err) {
 		console.error(`Failed to start child process. ${err}`);
 		process.exit(1);
 	});
-	toolProcess.stdout.on('data', (data) => {
+	toolProcess.stdout.on('data', function (data) {
 		stdoutToLines(data);
 	});
-}
+};
 
 const checkBinaryExists = function checkBinaryExists() {
   if (fs.existsSync(BUNDLETOOL_FILE_PATH)) return BUNDLETOOL_FILE_PATH;
@@ -86,7 +86,7 @@ const checkBinaryExists = function checkBinaryExists() {
 const getFileStream = function getFileStream() {
   return new Promise(function (resolve, reject) {
     fs.ensureDir(DEFAULT_BASE_DIRECTORY)
-    .then(() => {
+    .then(function () {
       resolve(fs.createWriteStream(BUNDLETOOL_FILE_PATH));
     })
     .catch(reject);
@@ -94,12 +94,12 @@ const getFileStream = function getFileStream() {
 };
 
 const downloadBinary = function downloadBinary() {
-  return new Promise((resolve, reject) => {
+  return new Promise(function (resolve, reject) {
     request(BUNDLETOOL_URL, {
       headers: {
         'User-Agent': 'Android-Bundletool-Wrapper-JS',
       }
-    }, async (error, response) => {
+    }, async function (error, response) {
       if (error) { 
         return reject(new Error('Unable to download the binary'));
       }
@@ -114,7 +114,7 @@ const downloadBinary = function downloadBinary() {
         gzip: true
       })
       .pipe(await getFileStream())
-      .on('close', () => {
+      .on('close', function () {
         console.log(chalk.green(`The file is finished downloading.`));
         resolve(BUNDLETOOL_FILE_PATH);
       });
