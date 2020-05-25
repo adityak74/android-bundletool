@@ -36,6 +36,23 @@ function lineLoggerMap(line) {
 	}
 }
 
+const checkIfJava = function checkIfJava(callback) {
+  var spawnProc = spawn('java', ['-version']);
+  spawnProc.on('error', function(err){
+      return callback(err, null);
+  });
+  spawnProc.stderr.on('data', function(data) {
+      data = data.toString().split('\n')[0];
+      var javaVersion = new RegExp('java version').test(data) ? data.split(' ')[2].replace(/"/g, '') : false;
+      if (javaVersion != false) {
+          // We have Java installed
+          return callback(null, javaVersion);
+      } else {
+          // TODO: No Java installed
+        return callback(new Error('Java not found'));
+      }
+  });
+};
 
 function stdoutToLines(stdout) {
 	let stdoutString = stdout.toString();
@@ -48,7 +65,7 @@ const spawnProcess = function spawnProcess(path, userArgs) {
 		spawnOptions.stdio = 'inherit';
 	}
 	spawnOptions.stdio = 'inherit';
-	let toolProcess = spawn(path, userArgs, {stdio: ['inherit', null, 'inherit']});
+	let toolProcess = spawn(path, userArgs, { stdio: ['inherit', null, 'inherit'], shell: true });
 	if(moreLogging) {
 		console.log(`${path} ${userArgs}`);
 	}
@@ -105,7 +122,7 @@ const downloadBinary = function downloadBinary() {
   });
 };
 
-
+module.exports.checkIfJava = checkIfJava;
 module.exports.spawnProcess = spawnProcess;
 module.exports.downloadBundletool = downloadBinary;
 module.exports.checkIfBundletoolExists = checkBinaryExists;

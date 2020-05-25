@@ -1,7 +1,9 @@
+const commands = require('./contants').commands;
 const helper = require('./helper');
 
 /*
 opts: {
+  command map object string required
   bundlePath string required
   outputPath string required
   overwrite boolean optional
@@ -9,30 +11,44 @@ opts: {
 }
 */
 
-const bundletool = function bundletool(opts) {
-  const bundletoolPath = helper.checkIfBundletoolExists();
-
-  if (!opts.bundlePath && !opts.outputPath) {
-    console.log('Bundletool: requires bundlePath and outputPath to function');
+function bundletool(opts) {
+  if (!opts.bundlePath || !opts.outputPath) {
+    console.error('Bundletool: requires bundlePath and outputPath to function');
     process.exit(1); // return with err code
   }
 
-  const optsArgs = [];
-  optsArgs.push('-jar');
-  optsArgs.push(bundletoolPath);
-  optsArgs.push('build-apks');
-  optsArgs.push(`--bundle=${opts.bundlePath}`);
-  optsArgs.push(`--output=${opts.outputPath}`);
-  optsArgs.push('--overwrite');
-  optsArgs.push('--mode=universal');
-
-  if (bundletoolPath) {
-    // spawn process with user arguments
-    helper.spawnProcess(`/usr/bin/java`, optsArgs);
-  } else {
-    // download the binary and then start the process with user args
-
+  if (!opts.command) {
+    console.error('Bundletool: requires command to execute');
+    process.exit(1); // return with err code
   }
-};
 
-module.exports.bundletool = bundletool;
+  helper.checkIfJava(function (javaError, javaVersion) {
+    if (javaError) {
+      console.log('Bundletool: java not found.');
+      process.exit(1); // return with err code
+    }
+    const bundletoolPath = helper.checkIfBundletoolExists();
+    const command = opts.command;
+    if (bundletoolPath) {
+      const optsArgs = [];
+      optsArgs.push(
+        '-jar',
+        bundletoolPath,
+        command,
+        `--bundle=${opts.bundlePath}`,
+        `--output=${opts.outputPath}`,
+        '--overwrite',
+        '--mode=universal'
+      );
+      // spawn process with user arguments
+      helper.spawnProcess('java', optsArgs);
+    } else {
+      // download the binary and then start the process with user args
+    }
+  });
+}
+
+module.exports = {
+  bundletool: bundletool,
+  bundletoolCommands: commands,
+};
