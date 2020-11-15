@@ -1,4 +1,4 @@
-# android-bundletool #
+# android-bundletool # (500+ Downloads)
 
 This is a fully self contained module that wraps the Android Bundletool (https://github.com/google/bundletool)
 
