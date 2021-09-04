@@ -18,7 +18,7 @@
   "homepage": "https://github.com/adityak74/android-bundletool#readme",
   "dependencies": {
     "chalk": "4.0.0",
-    "fs-extra": "9.0.0",
+    "fs-extra": "10.0.0",
     "request": "2.88.2"
   }
 }
